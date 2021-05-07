@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 // initializing variables
 $ini = parse_ini_file('cred.ini');
 $errors = array();
@@ -19,6 +18,7 @@ if (isset($_POST['signup_btn'])) {
   $email = mysqli_real_escape_string($db, $_POST['email']);
   $pass = mysqli_real_escape_string($db, $_POST['pass']);
   $cpass = mysqli_real_escape_string($db, $_POST['cpass']);
+  $scode = mysqli_real_escape_string($db, $_POST['scode']);
 
   // form validation: ensure that the form is correctly filled ...
   // by adding (array_push()) corresponding error unto $errors array
@@ -41,6 +41,17 @@ if (isset($_POST['signup_btn'])) {
     }
   }
 
+  if (empty($scode)) {
+  	array_push($errors, "Secret Code is Missing");
+  }
+  else{
+    if ($scode!=md5($ini['scode'])) {
+      array_push($errors, "Secret Code is Incorrect");
+    }
+  }
+  
+
+
   // Finally, register user if there are no errors in the form
   if (count($errors) == 0) {
   	$password = md5($pass);//encrypt the password before saving in the database
@@ -49,7 +60,7 @@ if (isset($_POST['signup_btn'])) {
   	mysqli_query($db, $query);
   	$_SESSION['email'] = $email;
   	$_SESSION['success'] = "You are now logged in";
-  	header('location: lib/dash.php');
+  	header('location: login.php');
   }
 }
 
@@ -64,7 +75,6 @@ if (isset($_POST['login_btn'])) {
   if (empty($pass)) {
   	array_push($errors, "Password is required");
   }
-
   if (count($errors) == 0) {
   	$password = md5($pass);
   	$query = "SELECT * FROM users WHERE email='$email' AND pass='$password'";
@@ -84,4 +94,5 @@ if (isset($_POST['login_btn'])) {
   	}
   }
 }
+
 ?>

@@ -1,6 +1,7 @@
 <?php
 include('updater.php');
 include('add.php');
+
 if(!isset($_SESSION['email']) || empty($_SESSION['email'])){
   header('location: ../index.php?logout=success');
   exit();
@@ -11,11 +12,10 @@ if(!isset($_SESSION['email']) || empty($_SESSION['email'])){
 <html>
 <head>
 <style>
-button{
-  width:13em;
-  height:3em;
+a{
+  text-decoration:none;
 }
-</style>
+</style> 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,6 +24,7 @@ button{
     <title>Document</title>
 </head>
 <body>
+    <script src="https://cdn.tiny.cloud/1/62tdblaj0rg0lb7itafj9i1n6nku6s8h5p42u34v8cn71vgo/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -52,7 +53,7 @@ button{
     </ul>
     <ul class="navbar-nav ml-auto">
       <li><a href="#" class=nav-link><i class="fa fa-user-plus"></i> Sign Up</a></li>
-      <li><a href="../index.php?logout=success" style="color: red;" class=nav-link><i class="fa fa-user-times"></i> Logout</a></label></li>
+      <li><a href="../index.php?logout=success" style="color: red;" class=nav-link><i class="fa fa-user-times"></i> Logout</a></li>
     </ul>
   </div>
 </nav>
@@ -61,21 +62,50 @@ button{
 <div style="width:25%;float:left;"><br></div>
 <div style="width:50%;float:left;">
 <br>
-<h5>Dashboard</h5>
+<h5>Delete Post</h5>
 <hr>
 <small class="mr-auto">Welcome <i class="text-primary"><?php echo $_SESSION['name']; ?></i> Signed in as <i class="text-primary"><?php echo $_SESSION['email']; ?></i></small><br><br>
-<a href="newpost.php"><button class="btn btn-success"><i class="fa fa-plus-square"></i> New Blog Post</button></a>
-<a href="delpost.php"><button class="btn btn-danger"><i class="fa fa-trash"></i> Delete Post</button></a><br><br>
-<a href="newpage.php"><button class="btn btn-success"><i class="fa fa-file"></i> New Page</button></a>
-<a href="delpage.php"><button class="btn btn-danger"><i class="fa fa-trash"></i> Delete Page</button></a><br><br>
-<?php if(isset($_SESSION['admin'])){?>
-<br>
-<h5>Admin Panel</h5>
-<hr>
-<a href="deluser.php"><button class="btn btn-danger"><i class="fa fa-user-times"></i><?php echo " Remove User"; ?></button></a>
-<a href="changeskey.php"><button class="btn btn-info"><i class="fa fa-key"></i><?php echo " Change Secret Key"; ?></button></a>
-<?php } ?>
+<a href="dash.php"><button class="btn btn-info"><i class="fa fa-arrow-left"></i> Back</button></a><br><br>
+
+<form method="POST" action="delpost.php">
+<label for="blogdtsearch">Enter Date:</label><br>
+<input type="text" name="blogdtsearch" placeholder="Enter the Date" class="form-control"><br>
+<small>OR</small><br><br>
+<label for="blognosearch">Enter Blog Number:</label><br>
+<input type="text" name="blognosearch" placeholder="Enter the Blog Post Number" class="form-control"><br>
+<input type="submit" name="blogsearch_btn" value="Search" class="btn btn-primary"><br><br>
+</form>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">B.No</th>
+      <th scope="col">Title</th>
+      <th scope="col">Date</th>
+      <th scope="col">Time</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+<?php
+if(isset($_POST['blogsearch_btn'])){ 
+  $sql5 = "SELECT * FROM blogs WHERE bno='" . $_POST['blognosearch'] . "' OR date='" . $_POST['blogdtsearch'] . "'";
+  $result5 = mysqli_query($db, $sql5);
+  while($row5 = mysqli_fetch_array($result5)){ 
+?>
+<tr>
+<td><?php echo $row5["bno"]; ?></td>
+<td><?php echo $row5["title"]; ?></td>
+<td><?php echo $row5["date"]; ?></td>
+<td><?php echo $row5["time"]; ?></td>
+<td><a class="text-danger" href="dash.php?bno=<?php echo $row5["bno"]; ?>&date=<?php echo $row5["date"]; ?> "><i class="fa fa-trash"></i> Delete</a></td>
+</tr>
+<?php }
+}
+?>
+</tbody>
+</table>
+<br><br>
 </div>
 <div style="width:25%;float:left;"><br></div>
-
 </html>

@@ -1,19 +1,19 @@
 <?php
 include('updater.php');
 include('add.php');
-if(!isset($_SESSION['email']) || empty($_SESSION['email'])){
+
+if(!isset($_SESSION['admin']) || empty($_SESSION['admin'])){
   header('location: ../index.php?logout=success');
   exit();
 }
-?>
+?> 
 
 <!DOCTYPE html>
 <html>
 <head>
 <style>
-button{
-  width:13em;
-  height:3em;
+a{
+  text-decoration:none;
 }
 </style>
     <meta charset="UTF-8">
@@ -24,6 +24,7 @@ button{
     <title>Document</title>
 </head>
 <body>
+    <script src="https://cdn.tiny.cloud/1/62tdblaj0rg0lb7itafj9i1n6nku6s8h5p42u34v8cn71vgo/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -52,7 +53,7 @@ button{
     </ul>
     <ul class="navbar-nav ml-auto">
       <li><a href="#" class=nav-link><i class="fa fa-user-plus"></i> Sign Up</a></li>
-      <li><a href="../index.php?logout=success" style="color: red;" class=nav-link><i class="fa fa-user-times"></i> Logout</a></label></li>
+      <li><a href="../index.php?logout=success" style="color: red;" class=nav-link><i class="fa fa-user-times"></i> Logout</a></li>
     </ul>
   </div>
 </nav>
@@ -61,21 +62,37 @@ button{
 <div style="width:25%;float:left;"><br></div>
 <div style="width:50%;float:left;">
 <br>
-<h5>Dashboard</h5>
+<h5>Remove User</h5>
 <hr>
 <small class="mr-auto">Welcome <i class="text-primary"><?php echo $_SESSION['name']; ?></i> Signed in as <i class="text-primary"><?php echo $_SESSION['email']; ?></i></small><br><br>
-<a href="newpost.php"><button class="btn btn-success"><i class="fa fa-plus-square"></i> New Blog Post</button></a>
-<a href="delpost.php"><button class="btn btn-danger"><i class="fa fa-trash"></i> Delete Post</button></a><br><br>
-<a href="newpage.php"><button class="btn btn-success"><i class="fa fa-file"></i> New Page</button></a>
-<a href="delpage.php"><button class="btn btn-danger"><i class="fa fa-trash"></i> Delete Page</button></a><br><br>
-<?php if(isset($_SESSION['admin'])){?>
-<br>
-<h5>Admin Panel</h5>
-<hr>
-<a href="deluser.php"><button class="btn btn-danger"><i class="fa fa-user-times"></i><?php echo " Remove User"; ?></button></a>
-<a href="changeskey.php"><button class="btn btn-info"><i class="fa fa-key"></i><?php echo " Change Secret Key"; ?></button></a>
-<?php } ?>
+<a href="dash.php"><button class="btn btn-info"><i class="fa fa-arrow-left"></i> Back</button></a><br><br>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">User.No</th>
+      <th scope="col">User Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+<?php
+  $sql8 = "SELECT * FROM users WHERE admin IS NULL";
+  $result8 = mysqli_query($db, $sql8);
+  while($row8 = mysqli_fetch_array($result8)){ 
+?>
+<tr>
+<td><?php echo $row8["uno"]; ?></td>
+<td><?php echo $row8["name"]; ?></td>
+<td><?php echo $row8["email"]; ?></td>
+<td><a class="text-danger" href="dash.php?uno=<?php echo $row8["uno"]; ?>"><i class="fa fa-trash"></i> Delete</a></td>
+</tr>
+<?php }
+?>
+</tbody>
+</table>
+<br><br>
 </div>
 <div style="width:25%;float:left;"><br></div>
-
 </html>

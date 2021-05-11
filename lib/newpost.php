@@ -56,14 +56,16 @@ a{
     </ul>
   </div>
 </nav>
-<!--NAVIGATION BAR-->
+<!--NAVIGATION BAR--> 
 
-<div style="width:15%;float:left;"><br></div>
-<div style="width:70%;float:left;">
+<div style="width:25%;float:left;"><br></div>
+<div style="width:50%;float:left;">
 <br>
-<small class="mr-auto">Welcome <?php echo $_SESSION['name']; ?> Signed in as <?php echo $_SESSION['email']; ?></small><br><br>
+<h5>New Blog Post</h5>
+<hr>
+<small class="mr-auto">Welcome <i class="text-primary"><?php echo $_SESSION['name']; ?></i> Signed in as <i class="text-primary"><?php echo $_SESSION['email']; ?></i></small><br><br>
 <a href="dash.php"><button class="btn btn-info"><i class="fa fa-arrow-left"></i> Back</button></a><br><br>
-<form method="post" action="newpost.php">
+<form method="POST" action="newpost.php">
   <label for="title">Title:</label><br>
   <input type="text" name="title" placeholder="Enter your blog title" size="80" class="form-control"><br>
   
@@ -74,19 +76,21 @@ a{
   <input type="text" name="img" placeholder="Enter the Image Link" size="80" class="form-control"><br>
   
   <label for="editor">Content:</label>
-  <textarea name="editor" id="editor" rows="10" cols="80" class="form-control" placeholder="Your Content goes here...">
+  <textarea name="editor" id="editor" rows="40" cols="80" class="form-control" placeholder="Your Content goes here...">
   </textarea><br>
 
   <label for="sources">Sources:</label><br>
   <input type="text" name="sources" placeholder="Enter the sources you referred" size="80" class="form-control"><br>
   
+  <!--
   <label for="author">Author:</label><br>
   <input type="text" name="author" placeholder="Enter Your Name" size="80" class="form-control"><br>
-  
+    -->
+
   <label for="links">Links:</label><br>
   <input type="text" name="links" placeholder="Enter the links for referrence" size="80" class="form-control"><br>
 
-  <input class="btn btn-primary" type="submit" name="submit" value="Submit">
+  <input class="btn btn-primary" type="submit" name="addblog_btn" value="Submit">
 </form>
 </div>
 <div style="width:15%;float:left;"><br></div>
@@ -97,4 +101,4 @@ tinymce.init({
     selector: '#editor'
 });
 </script>
-</html>
+</html> 
